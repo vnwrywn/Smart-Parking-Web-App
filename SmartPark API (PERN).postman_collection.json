@@ -1,0 +1,437 @@
+{
+	"info": {
+		"_postman_id": "b367f3f7-653e-4432-9ecb-7f992119fe30",
+		"name": "SmartPark API (PERN)",
+		"description": "Comprehensive test collection for SmartPark backend (PERN stack). Includes Admin session-based and User JWT-based authentication, plus Building, Lot, and Slot management endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49927785"
+	},
+	"item": [
+		{
+			"name": "Admin Authentication",
+			"item": [
+				{
+					"name": "POST Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Login should succeed', function () {",
+									"  pm.response.to.have.status(200);",
+									"  pm.expect(pm.response.json().status).to.eql('success');",
+									"});",
+									"pm.environment.set('admin_cookie', pm.cookies.get('connect.sid'));"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin1\",\n  \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "connect.sid={{admin_cookie}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Authentication",
+			"item": [
+				{
+					"name": "POST Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"user123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let json = pm.response.json();",
+									"if (json.token) pm.environment.set('user_token', json.token);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"user123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Buildings",
+			"item": [
+				{
+					"name": "GET All Buildings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/buildings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"buildings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Building",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Cookie",
+								"value": "connect.sid={{admin_cookie}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Innovation Tower\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/buildings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"buildings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update Building",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Cookie",
+								"value": "connect.sid={{admin_cookie}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Main Mall East\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/buildings/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"buildings",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Delete Building",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "connect.sid={{admin_cookie}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/buildings/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"buildings",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Parking Lots",
+			"item": [
+				{
+					"name": "GET All Lots",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/lots",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"lots"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Lot",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Cookie",
+								"value": "connect.sid={{admin_cookie}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"building_id\": 1,\n  \"floor_name\": \"B3\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/lots",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"lots"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Slots",
+			"item": [
+				{
+					"name": "GET All Slots",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/slots",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slots"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Slot",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Cookie",
+								"value": "connect.sid={{admin_cookie}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"lot_id\": 1,\n  \"x\": 1,\n  \"y\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/slots",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slots"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Toggle Slot Occupancy",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "connect.sid={{admin_cookie}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/slots/1/toggle",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slots",
+								"1",
+								"toggle"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Delete Slot",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "connect.sid={{admin_cookie}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/slots/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"slots",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000/api"
+		},
+		{
+			"key": "admin_cookie",
+			"value": ""
+		},
+		{
+			"key": "user_token",
+			"value": ""
+		}
+	]
+}

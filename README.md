@@ -47,7 +47,7 @@ This project was developed as part of the **Fullstack Developer Intern Case Stud
 
 ## Use Case Diagram
 
-![Use Case Diagram]
+![Use Case Diagram](/images/Use%20Case%20Diagram.svg)
 
 ## Use Case Tables
 
@@ -286,9 +286,9 @@ This project was developed as part of the **Fullstack Developer Intern Case Stud
 | Main Flow | 1. Admin clicks the log out button.<br>2. Revoke the Admin's session.<br>3. Redirect to home page. |
 | Postconditions | Admin is logged out and is redirected to the admin login page. |
 
-## ERD / Schema Design (simplified)
+## Entity-Relational Diagram
 
-![ER Diagram]
+![ER Diagram](/images/ERD.svg)
 
 ## Technology Choices & Justification
 
@@ -394,7 +394,7 @@ app.use((err, req, res, next) => {
 ### Setup
 
 ```bash
-git clone https://github.com/<your-username>/smartpark.git
+git clone https://github.com/vnwrywn/Smart-Parking-Web-App.git
 cd smartpark
 ```
 
